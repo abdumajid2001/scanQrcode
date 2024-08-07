@@ -54,33 +54,39 @@ public class DeviceServerImpl implements DeviceService {
 
         User userOptional = userService.findById(userId);
 
-        if (userOptional.isDeleted()) {
-
             List<Device> delete = deviceRepository.getDeviceByUserId(userId);
 
             for (Device device : delete) {
-                if (device.isDeleted()){
+                if (!device.isDeleted()){
                     device.setDeleted(true);
                     deviceRepository.save(device);
                 }
             }
-        }
     }
 
     @Override
     public List<DeviceDto> findByUserId(Long userId) {
+
         List<DeviceDto> deviceList = new ArrayList<>();
+
         List<Device> delete = deviceRepository.getDeviceByUserId(userId);
+
         for (Device device : delete) {
-            if (device.isDeleted()){
+
+            if (!device.isDeleted()){
+
                 deviceList.add(getDto(device));
             }
+
         }
+
         return deviceList;
     }
 
     private DeviceDto getDto(Device device) {
+
         DeviceDto deviceDto = new DeviceDto();
+
         deviceDto.setDeviceModel(device.getDeviceModel());
         deviceDto.setDeviceSystem(device.getDeviceSystem());
         deviceDto.setMacAddress(device.getMacAddress());
