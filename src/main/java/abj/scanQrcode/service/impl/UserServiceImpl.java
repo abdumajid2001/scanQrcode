@@ -5,6 +5,7 @@ import abj.scanQrcode.dto.auth.UserDto;
 import abj.scanQrcode.entity.User;
 import abj.scanQrcode.enums.UserRole;
 import abj.scanQrcode.exception.AlreadyException;
+import abj.scanQrcode.exception.NotFoundException;
 import abj.scanQrcode.exception.NotNullFieldException;
 import abj.scanQrcode.repository.UserRepository;
 import abj.scanQrcode.service.UserService;
@@ -68,5 +69,12 @@ public class UserServiceImpl implements UserService {
             repository.save(user);
         }
     }
+
+    @Override
+    public User findById(Long id) {
+        return repository.findByIdAndDeletedFalse(id)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+    }
+
 
 }
