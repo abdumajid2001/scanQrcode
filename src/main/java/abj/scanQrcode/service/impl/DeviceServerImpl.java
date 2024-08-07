@@ -19,8 +19,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class DeviceServerImpl implements DeviceService {
 
-    private final UserService userService ;
-    private final DeviceRepository deviceRepository ;
+    private final UserService userService;
+    private final DeviceRepository deviceRepository;
 
     @Override
     public Long createDevice(DeviceCreateDto device) {
@@ -43,7 +43,6 @@ public class DeviceServerImpl implements DeviceService {
         Optional<Device> device = deviceRepository.findById(deviceId);
         if (device.isPresent()) {
             Device delete = device.get();
-
             delete.setDeleted(true);
             deviceRepository.save(delete);
         }
@@ -51,48 +50,21 @@ public class DeviceServerImpl implements DeviceService {
 
     @Override
     public void deleteByUserId(Long userId) {
+        List<Device> delete = deviceRepository.findByUserAndDeletedFalse(userService.findById(userId));
 
-        User userOptional = userService.findById(userId);
-
-            List<Device> delete = deviceRepository.getDeviceByUserId(userId);
-
-            for (Device device : delete) {
-                if (!device.isDeleted()){
-                    device.setDeleted(true);
-                    deviceRepository.save(device);
-                }
+        for (Device device : delete) {
+            if (!device.isDeleted()) {
+                device.setDeleted(true);
+                deviceRepository.save(device);
             }
+        }
     }
 
     @Override
     public List<DeviceDto> findByUserId(Long userId) {
-
-        List<DeviceDto> deviceList = new ArrayList<>();
-
-        List<Device> delete = deviceRepository.getDeviceByUserId(userId);
-
-        for (Device device : delete) {
-
-            if (!device.isDeleted()){
-
-                deviceList.add(getDto(device));
-            }
-
-        }
-
-        return deviceList;
+        return deviceRepository.getDeviceByUserId(userId);
     }
 
-    private DeviceDto getDto(Device device) {
 
-        DeviceDto deviceDto = new DeviceDto();
-
-        deviceDto.setDeviceModel(device.getDeviceModel());
-        deviceDto.setDeviceSystem(device.getDeviceSystem());
-        deviceDto.setMacAddress(device.getMacAddress());
-        deviceDto.setSerialNumber(device.getSerialNumber());
-
-        return deviceDto ;
-    }
 
 }

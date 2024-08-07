@@ -11,6 +11,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class DeviceDto {
 
+    private Long id;
+
     private String deviceModel;
 
     private String deviceSystem;

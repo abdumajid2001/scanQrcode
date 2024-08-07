@@ -20,7 +20,6 @@ public class DeviceController {
 
 //    create
     @PostMapping("create")
-    @PreAuthorize("hasAnyAuthority('SUPER_ADMIN','ADMIN','USER')")
     public ResponseEntity<DataDto<Long>> create(@RequestBody DeviceCreateDto device) {
         return new ResponseEntity<>(
                 new DataDto<>(service.createDevice(device)) ,
@@ -30,15 +29,13 @@ public class DeviceController {
 
 //deleteById
     @DeleteMapping("delete/{id}")
-    @PreAuthorize("hasAuthority('SUPER_ADMIN')")
     public void deleteById(@PathVariable("id") Long id) {
         service.deleteById(id);
     }
 
 
 //deleteByUserId( userId )
-    @DeleteMapping("delete/{id}")
-    @PreAuthorize("hasAuthority('SUPER_ADMIN')")
+    @DeleteMapping("deleteByUserId/{id}")
     public void deleteByUserId(@PathVariable("id") Long id) {
         service.deleteByUserId(id);
     }
