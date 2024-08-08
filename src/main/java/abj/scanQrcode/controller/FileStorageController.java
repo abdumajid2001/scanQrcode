@@ -29,8 +29,20 @@ public class FileStorageController {
         return ResponseEntity.ok(new DataDto<>("File uploaded successfully: "));
     }
 
-    @GetMapping("download/{fileId}")
-    public ResponseEntity<Resource> download(@PathVariable Long fileId) throws IOException {
+    @GetMapping("download/picture/{pictureId}")
+    public ResponseEntity<Resource> downloadPicture(@PathVariable Long pictureId) throws IOException {
+        FileStorageDto fileDto = service.download(pictureId);
+        Resource file = fileDto.getResource();
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(fileDto.getType()))
+                .contentLength(file.contentLength())
+                .header(HttpHeaders.CONTENT_DISPOSITION, fileDto.getHeaderValue())
+                .body(file);
+    }
+
+    @GetMapping("download/file/{fileId}")
+    public ResponseEntity<Resource> downloadFile(@PathVariable Long fileId) throws IOException {
         FileStorageDto fileDto = service.download(fileId);
         Resource file = fileDto.getResource();
 

@@ -90,8 +90,8 @@ public class UserServiceImpl implements UserService {
 
     public UserDto toDto(User user) {
         String baseUrl = this.baseUrl + "/file/download/";
-        String fileUrl = Objects.nonNull(user.getFile()) ? baseUrl + user.getFile().getId() : "";
-        String pictureUrl = Objects.nonNull(user.getPicture()) ? baseUrl + user.getPicture().getId() : "";
+        String fileUrl = Objects.nonNull(user.getFile()) ? baseUrl + "file/" + user.getFile().getId() : "";
+        String pictureUrl = Objects.nonNull(user.getPicture()) ? baseUrl + "picture/" + user.getPicture().getId() : "";
 
         return new UserDto(user.getId(), user.getUsername(), user.getRole(), user.getFirstName(), user.getLastName(), user.getBirthDate().toString(), user.getRank(), fileUrl, pictureUrl);
     }
