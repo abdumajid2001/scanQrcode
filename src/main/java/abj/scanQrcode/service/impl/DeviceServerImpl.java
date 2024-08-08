@@ -24,9 +24,7 @@ public class DeviceServerImpl implements DeviceService {
 
     @Override
     public Long createDevice(DeviceCreateDto device) {
-
         Device newDevice = new Device();
-
         newDevice.setDeviceModel(device.getDeviceModel());
         newDevice.setDeviceSystem(device.getDeviceSystem());
         newDevice.setMacAddress(device.getMacAddress());
@@ -41,6 +39,7 @@ public class DeviceServerImpl implements DeviceService {
     @Override
     public void deleteById(Long deviceId) {
         Optional<Device> device = deviceRepository.findById(deviceId);
+
         if (device.isPresent()) {
             Device delete = device.get();
             delete.setDeleted(true);
@@ -64,7 +63,5 @@ public class DeviceServerImpl implements DeviceService {
     public List<DeviceDto> findByUserId(Long userId) {
         return deviceRepository.getDeviceByUserId(userId);
     }
-
-
 
 }
