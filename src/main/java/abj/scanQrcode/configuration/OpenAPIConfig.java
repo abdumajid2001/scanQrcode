@@ -18,8 +18,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OpenAPIConfig {
 
-    @Value("${itm.openapi.url}")
-    private String url;
+    @Value("${baseUrl}")
+    private String baseUrl;
 
     private SecurityScheme createAPIKeyScheme() {
         return new SecurityScheme()
@@ -31,7 +31,7 @@ public class OpenAPIConfig {
     @Bean
     public OpenAPI myOpenAPI() {
         Server server = new Server();
-        server.setUrl(url);
+        server.setUrl(baseUrl);
         server.setDescription("Server URL in Development environment");
 
         Contact contact = new Contact();

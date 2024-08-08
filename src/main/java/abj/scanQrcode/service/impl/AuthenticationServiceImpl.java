@@ -40,8 +40,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final ObjectMapper mapper;
     private final TokenService tokenService;
 
-    @Value("${itm.openapi.url}")
-    private String prodUrl;
+    @Value("${baseUrl}")
+    private String baseUrl;
 
     @Override
     public synchronized void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -75,7 +75,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public ResponseEntity<DataDto<AuthenticationResponse>> accessToken(AuthenticationRequest request) {
         try {
             HttpClient httpclient = HttpClientBuilder.create().build();
-            HttpPost httppost = new HttpPost(prodUrl + "/auth/authenticate");
+            HttpPost httppost = new HttpPost(baseUrl + "/auth/authenticate");
             byte[] bytes = mapper.writeValueAsBytes(request);
             ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
             httppost.addHeader("Content-Type", "application/x-www-form-urlencoded");

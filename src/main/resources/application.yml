@@ -5,7 +5,7 @@ spring:
     active: dev
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/scanqrcode
+    url: jdbc:postgresql://localhost:5432/scan_qr_code
     username: postgres
     password: 123
   jpa:

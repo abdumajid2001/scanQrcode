@@ -3,6 +3,7 @@ package abj.scanQrcode.configuration.security;
 import abj.scanQrcode.dto.responce.AppErrorDto;
 import abj.scanQrcode.dto.responce.DataDto;
 import abj.scanQrcode.repository.TokenRepository;
+import abj.scanQrcode.service.impl.UserDetailsServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;

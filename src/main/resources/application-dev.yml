@@ -3,9 +3,8 @@ spring:
     hibernate:
       ddl-auto: update
 
-itm:
-  openapi:
-    url: https://new-python-generally.ngrok-free.app
+
+baseUrl: http://localhost:8080
 
 server:
   port: 8080
