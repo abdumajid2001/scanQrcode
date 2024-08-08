@@ -20,7 +20,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
     @Query("select new abj.scanQrcode.entity.User(u.id,u.username,u.role,u.firstName,u.lastName,u.birthDate,u.rank,u.file,u.picture) from User u where u.qrCodeText = ?1")
     User findByQrCodeText(String qrCodeText);
 
-    @Query("select new abj.scanQrcode.entity.User(u.id,u.username,u.role,u.firstName,u.lastName,u.birthDate,u.rank,u.qrCodeText,u.file,u.picture) from User u where u.qrCodeText = ?1")
+    @Query("select new abj.scanQrcode.entity.User(u.id,u.username,u.role,u.firstName,u.lastName,u.birthDate,u.rank,u.qrCodeText,u.file,u.picture) from User u")
     List<User> findAllBy();
 
 }

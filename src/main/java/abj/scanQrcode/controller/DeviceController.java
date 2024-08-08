@@ -18,7 +18,6 @@ import java.util.List;
 public class DeviceController {
     private final DeviceService service;
 
-//    create
     @PostMapping("create")
     public ResponseEntity<DataDto<Long>> create(@RequestBody DeviceCreateDto device) {
         return new ResponseEntity<>(
@@ -27,20 +26,16 @@ public class DeviceController {
         );
     }
 
-//deleteById
     @DeleteMapping("delete/{id}")
     public void deleteById(@PathVariable("id") Long id) {
         service.deleteById(id);
     }
 
-
-//deleteByUserId( userId )
     @DeleteMapping("deleteByUserId/{id}")
     public void deleteByUserId(@PathVariable("id") Long id) {
         service.deleteByUserId(id);
     }
 
-//getAllByUserId( userId )
     @GetMapping("getAllByUserId/{id}")
     public ResponseEntity<DataDto<List<DeviceDto>>> getAllByUserId(@PathVariable("id") Long id) {
         return new ResponseEntity<>(
