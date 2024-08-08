@@ -3,14 +3,12 @@ package abj.scanQrcode.service.impl;
 import abj.scanQrcode.dto.DeviceCreateDto;
 import abj.scanQrcode.dto.DeviceDto;
 import abj.scanQrcode.entity.Device;
-import abj.scanQrcode.entity.User;
 import abj.scanQrcode.repository.DeviceRepository;
 import abj.scanQrcode.service.DeviceService;
 import abj.scanQrcode.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
