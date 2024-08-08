@@ -2,7 +2,10 @@ package abj.scanQrcode.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -46,5 +49,9 @@ public abstract class Auditable {
     @Column(name = "is_deleted", columnDefinition = "boolean default false")
     @JsonIgnore
     private boolean deleted;
+
+    public Auditable(Long id) {
+        this.id = id;
+    }
 
 }

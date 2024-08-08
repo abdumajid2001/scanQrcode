@@ -1,4 +1,4 @@
-package abj.scanQrcode.configuration.security;
+package abj.scanQrcode.service.impl;
 
 import abj.scanQrcode.entity.User;
 import abj.scanQrcode.exception.UsernameNotFoundException;

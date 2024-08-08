@@ -1,20 +1,20 @@
 package abj.scanQrcode.service.impl;
 
-import abj.scanQrcode.dto.auth.AuthenticationRequest;
 import abj.scanQrcode.dto.auth.UserDto;
+import abj.scanQrcode.dto.auth.UserRegisterDto;
 import abj.scanQrcode.entity.User;
-import abj.scanQrcode.enums.UserRole;
 import abj.scanQrcode.exception.AlreadyException;
-import abj.scanQrcode.exception.NotNullFieldException;
+import abj.scanQrcode.exception.NotFoundException;
 import abj.scanQrcode.repository.UserRepository;
 import abj.scanQrcode.service.UserService;
-import abj.scanQrcode.utils.Util;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,30 +22,32 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
+    @Value("${baseUrl}")
+    private String baseUrl;
+
     private final UserRepository repository;
     private final PasswordEncoder encoder;
 
     @Override
-    public UserDto getUser() {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return new UserDto(user.getId(), user.getUsername(), user.getRole());
+    public UserDto getByQrcode(String qrCodeText) {
+        return toDto(repository.findByQrCodeText(qrCodeText));
     }
 
     @Override
-    public Long register(AuthenticationRequest request) {
-        //todo annotation base qil
-        if (Util.isNullFields(request.getUsername(), request.getPassword())) {
-            throw new NotNullFieldException("Field not null");
-        }
+    public UserDto getUser() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if (repository.existsByUsername(request.getUsername())) {
-            throw new AlreadyException(request.getUsername() + "- username mavjud !!!");
+        return toDto(user);
+    }
+
+    @Override
+    public Long register(UserRegisterDto dto) {
+        if (repository.existsByUsername(dto.getUsername())) {
+            throw new AlreadyException(dto.getUsername() + "- username mavjud !!!");
         }
-        User user = User.builder()
-                .username(request.getUsername())
-                .password(encoder.encode(request.getPassword()))
-                .role(UserRole.ADMIN)
-                .build();
+        String qrText = UUID.randomUUID().toString().replace("-", "") + System.currentTimeMillis();
+        User user = new User(dto.getUsername(), encoder.encode(dto.getPassword()), dto.getRole(), dto.getFirstName(), dto.getLastName(), dto.getBirthDate(), dto.getRank(), qrText);
+
         User savedUser = repository.save(user);
 
         return savedUser.getId();
@@ -53,7 +55,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> getAll() {
-        return null;
+        return repository.findAllBy()
+                .parallelStream()
+                .map(user -> {
+                    UserDto dto = toDto(user);
+                    dto.setQrCodeText(user.getQrCodeText());
+                    return dto;
+                })
+                .toList();
     }
 
     @Override
@@ -67,6 +76,24 @@ public class UserServiceImpl implements UserService {
             user.setDeleted(true);
             repository.save(user);
         }
+    }
+
+    @Override
+    public User findById(Long id) {
+        return repository.findByIdAndDeletedFalse(id)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+    }
+
+    public User save(User user) {
+        return repository.save(user);
+    }
+
+    public UserDto toDto(User user) {
+        String baseUrl = this.baseUrl + "/file/download/";
+        String fileUrl = Objects.nonNull(user.getFile()) ? baseUrl + user.getFile().getId() : "";
+        String pictureUrl = Objects.nonNull(user.getPicture()) ? baseUrl + user.getPicture().getId() : "";
+
+        return new UserDto(user.getId(), user.getUsername(), user.getRole(), user.getFirstName(), user.getLastName(), user.getBirthDate().toString(), user.getRank(), fileUrl, pictureUrl);
     }
 
 }

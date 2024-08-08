@@ -2,7 +2,6 @@ package abj.scanQrcode.configuration.security;
 
 import abj.scanQrcode.dto.auth.AuthenticationRequest;
 import abj.scanQrcode.dto.auth.AuthenticationResponse;
-import abj.scanQrcode.dto.auth.UserDto;
 import abj.scanQrcode.dto.responce.AppErrorDto;
 import abj.scanQrcode.dto.responce.DataDto;
 import abj.scanQrcode.entity.User;
@@ -12,6 +11,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,6 +32,8 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
 
+    private static final Logger logger = LoggerFactory.getLogger(AuthenticationFilter.class);
+
     public AuthenticationFilter(ObjectMapper mapper, JwtService jwtService, AuthenticationManager authenticationManager, TokenService tokenService) {
         this.mapper = mapper;
         this.jwtService = jwtService;
@@ -48,7 +51,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
             UsernamePasswordAuthenticationToken authenticateToken = new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword());
             return authenticationManager.authenticate(authenticateToken);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
             throw new RuntimeException();
         }
     }
@@ -60,12 +63,11 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         var refreshToken = jwtService.generateRefreshToken(user);
         tokenService.revokeAllUserTokens(user);
         tokenService.saveUserToken(user, jwtToken);
-        UserDto userDto = new UserDto(user.getId(), user.getUsername(), user.getRole());
+
         AuthenticationResponse authenticationResponse = AuthenticationResponse
                 .builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
-                .userDto(userDto)
                 .build();
 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);

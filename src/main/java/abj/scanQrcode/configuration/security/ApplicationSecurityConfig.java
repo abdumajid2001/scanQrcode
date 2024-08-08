@@ -1,7 +1,8 @@
 package abj.scanQrcode.configuration.security;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import abj.scanQrcode.repository.UserRepository;
+import abj.scanQrcode.service.impl.UserDetailsServiceImpl;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -43,7 +44,7 @@ public class ApplicationSecurityConfig {
     private final TokenService tokenService;
     private AuthenticationManager authenticationManager;
 
-    public static final String[] WHITE_LIST = {"/auth/**", "/v3/api-docs/**", "/swagger-ui/**"};
+    public static final String[] WHITE_LIST = {"/auth/**","/file/download/**", "/v3/api-docs/**", "/swagger-ui/**"};
 
     @Bean
     public UserDetailsService userDetailsService() {
@@ -68,6 +69,8 @@ public class ApplicationSecurityConfig {
         CorsConfiguration corsConfig = new CorsConfiguration();
         corsConfig.setAllowedOrigins(List.of(
                 "http://localhost:8080",
+                "http://192.168.30.30:8080",
+                "http://192.168.30.18:8080",
                 "https://new-python-generally.ngrok-free.app"
         ));
         corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));

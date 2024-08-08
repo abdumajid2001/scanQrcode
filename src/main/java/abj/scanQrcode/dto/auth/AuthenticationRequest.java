@@ -15,7 +15,4 @@ public class AuthenticationRequest {
 
     private String password;
 
-    public AuthenticationRequest(String username) {
-        this.username = username;
-    }
 }
