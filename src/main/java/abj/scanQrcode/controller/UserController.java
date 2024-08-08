@@ -43,11 +43,11 @@ public class UserController {
         return ResponseEntity.ok(new DataDto<>(service.getAll()));
     }
 
-    @DeleteMapping("delete/{id}")
-    @PreAuthorize("hasAnyAuthority('SUPER_ADMIN','ADMIN','USER')")
-    public void delete(@PathVariable("id") Long id) {
-        service.delete(id);
-    }
+//    @DeleteMapping("delete/{id}")
+//    @PreAuthorize("hasAnyAuthority('SUPER_ADMIN','ADMIN','USER')")
+//    public void delete(@PathVariable("id") Long id) {
+//        service.delete(id);
+//    }
 
     @GetMapping("getByQrCodeText/{qrCodeText}")
     @PreAuthorize("hasAnyAuthority('SUPER_ADMIN','ADMIN','USER')")
