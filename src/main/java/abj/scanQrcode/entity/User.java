@@ -1,20 +1,17 @@
 package abj.scanQrcode.entity;
 
+import abj.scanQrcode.enums.Position;
 import abj.scanQrcode.enums.Rank;
+import abj.scanQrcode.enums.Gender;
 import abj.scanQrcode.enums.UserRole;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.SQLRestriction;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,32 +20,36 @@ import java.util.List;
 @Getter
 @Setter
 @SQLRestriction("is_deleted = false")
-public class User extends Auditable implements UserDetails {
+public class User extends Auditable {
 
     @Column(unique = true)
     private String username;
 
-    @JsonIgnore
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    private UserRole role;
-
-    @NotEmpty(message = "FirstName may not be empty")
-    @Size(min = 6, max = 32, message = "FirstName must be between 6 and 32 characters long")
     private String firstName;
 
-    @NotEmpty(message = "LastName may not be empty")
-    @Size(min = 6, max = 32, message = "LastName must be between 6 and 32 characters long")
     private String lastName;
+
+    private String middleName;
 
     private LocalDate birthDate;
 
     @Enumerated(EnumType.STRING)
+    private Gender gender;
+
+    private String phoneNumber;
+
+    private String address;
+
+    @Enumerated(EnumType.STRING)
+    private Position position;
+
+    @Enumerated(EnumType.STRING)
     private Rank rank;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<Token> tokens;
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
 
     @Column(name = "qr_code_text")
     private String qrCodeText;
@@ -61,14 +62,31 @@ public class User extends Auditable implements UserDetails {
     @JoinColumn(name = "picture_id")
     private FileStorage picture;
 
-    public User(String username, String password, UserRole role, String firstName, String lastName, LocalDate birthDate, Rank rank, String qrCodeText) {
+    public User(String username,
+                String password,
+                String lastName,
+                String firstName,
+                String middleName,
+                LocalDate birthDate,
+                Gender gender,
+                String phoneNumber,
+                String address,
+                Position position,
+                Rank rank,
+                UserRole role,
+                String qrCodeText) {
         this.username = username;
         this.password = password;
-        this.role = role;
-        this.firstName = firstName;
         this.lastName = lastName;
+        this.firstName = firstName;
+        this.middleName = middleName;
         this.birthDate = birthDate;
+        this.gender = gender;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.position = position;
         this.rank = rank;
+        this.role = role;
         this.qrCodeText = qrCodeText;
     }
 
@@ -95,41 +113,6 @@ public class User extends Auditable implements UserDetails {
         this.qrCodeText = qrCodeText;
         this.file = file;
         this.picture = picture;
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public String getUsername() {
-        return username;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
     }
 
 }

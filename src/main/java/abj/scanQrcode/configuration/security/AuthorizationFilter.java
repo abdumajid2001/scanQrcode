@@ -16,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -41,7 +40,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
         String servletPath = request.getServletPath();
 
         for (String path : ApplicationSecurityConfig.WHITE_LIST) {
-            if (servletPath.contains(path.substring(0, path.indexOf("*")))) {
+            if (servletPath.contains(path.substring(0, path.indexOf("*")-1))) {
                 filterChain.doFilter(request, response);
                 return;
             }
@@ -75,7 +74,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            MyUserDetails userDetails = userDetailsService.loadUserByUsername(username);
             boolean isTokenValid = tokenRepository
                     .findTokenByToken(token)
                     .map(t -> !t.isExpired() && !t.isRevoked())

@@ -58,11 +58,11 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException {
-        User user = (User) authResult.getPrincipal();
+        MyUserDetails user = (MyUserDetails) authResult.getPrincipal();
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
-        tokenService.revokeAllUserTokens(user);
-        tokenService.saveUserToken(user, jwtToken);
+        tokenService.revokeAllUserTokens(user.getId());
+        tokenService.saveUserToken(user.getId(), jwtToken);
 
         AuthenticationResponse authenticationResponse = AuthenticationResponse
                 .builder()
