@@ -1,7 +1,7 @@
 package abj.scanQrcode.service;
 
-import abj.scanQrcode.dto.DeviceCreateDto;
-import abj.scanQrcode.dto.DeviceDto;
+import abj.scanQrcode.dto.device.DeviceCreateDto;
+import abj.scanQrcode.dto.device.DeviceDto;
 
 import java.util.List;
 

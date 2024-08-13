@@ -4,7 +4,6 @@ import abj.scanQrcode.dto.auth.AuthenticationRequest;
 import abj.scanQrcode.dto.auth.AuthenticationResponse;
 import abj.scanQrcode.dto.responce.AppErrorDto;
 import abj.scanQrcode.dto.responce.DataDto;
-import abj.scanQrcode.entity.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;

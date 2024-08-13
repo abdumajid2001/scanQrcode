@@ -1,7 +1,7 @@
 package abj.scanQrcode.controller;
 
-import abj.scanQrcode.dto.DeviceCreateDto;
-import abj.scanQrcode.dto.DeviceDto;
+import abj.scanQrcode.dto.device.DeviceCreateDto;
+import abj.scanQrcode.dto.device.DeviceDto;
 import abj.scanQrcode.dto.responce.DataDto;
 import abj.scanQrcode.service.DeviceService;
 import lombok.RequiredArgsConstructor;
