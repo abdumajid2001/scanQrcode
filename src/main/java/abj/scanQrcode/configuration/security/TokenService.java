@@ -3,7 +3,6 @@ package abj.scanQrcode.configuration.security;
 import abj.scanQrcode.entity.Token;
 import abj.scanQrcode.repository.TokenRepository;
 import abj.scanQrcode.service.UserService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +15,7 @@ public class TokenService {
     private final TokenRepository repository;
     private final UserService userService;
 
-    public TokenService(TokenRepository repository,@Lazy UserService userService) {
+    public TokenService(TokenRepository repository, @Lazy UserService userService) {
         this.repository = repository;
         this.userService = userService;
     }
