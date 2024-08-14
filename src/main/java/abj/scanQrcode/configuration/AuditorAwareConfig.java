@@ -1,6 +1,6 @@
 package abj.scanQrcode.configuration;
 
-import abj.scanQrcode.entity.User;
+import abj.scanQrcode.configuration.security.MyUserDetails;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
@@ -24,11 +24,11 @@ public class AuditorAwareConfig implements AuditorAware<Long> {
     public Optional<Long> getCurrentAuditor() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (Objects.isNull(authentication) || !authentication.isAuthenticated() || !(authentication.getPrincipal() instanceof User)) {
+        if (Objects.isNull(authentication) || !authentication.isAuthenticated() || !(authentication.getPrincipal() instanceof MyUserDetails)) {
             return Optional.empty();
         }
 
-        return Optional.of(((User) authentication.getPrincipal()).getId());
+        return Optional.of(((MyUserDetails) authentication.getPrincipal()).getId());
     }
 
 }

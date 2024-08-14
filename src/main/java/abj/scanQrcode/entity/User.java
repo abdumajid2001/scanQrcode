@@ -1,8 +1,8 @@
 package abj.scanQrcode.entity;
 
+import abj.scanQrcode.enums.Gender;
 import abj.scanQrcode.enums.Position;
 import abj.scanQrcode.enums.Rank;
-import abj.scanQrcode.enums.Gender;
 import abj.scanQrcode.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,10 +15,14 @@ import java.time.LocalDate;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "users")
 @Getter
 @Setter
+@Entity
+@Table(name = "users",
+        indexes = {
+                @Index(name = "unique_qr_code_text", columnList = "qrCodeText", unique = true)
+        }
+)
 @SQLRestriction("is_deleted = false")
 public class User extends Auditable {
 
@@ -51,7 +55,6 @@ public class User extends Auditable {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
-    @Column(name = "qr_code_text")
     private String qrCodeText;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -90,29 +93,5 @@ public class User extends Auditable {
         this.qrCodeText = qrCodeText;
     }
 
-    public User(Long id, String username, UserRole role, String firstName, String lastName, LocalDate birthDate, Rank rank, FileStorage file, FileStorage picture) {
-        super(id);
-        this.username = username;
-        this.role = role;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.birthDate = birthDate;
-        this.rank = rank;
-        this.file = file;
-        this.picture = picture;
-    }
-
-    public User(Long id, String username, UserRole role, String firstName, String lastName, LocalDate birthDate, Rank rank, String qrCodeText, FileStorage file, FileStorage picture) {
-        super(id);
-        this.username = username;
-        this.role = role;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.birthDate = birthDate;
-        this.rank = rank;
-        this.qrCodeText = qrCodeText;
-        this.file = file;
-        this.picture = picture;
-    }
-
 }
+
