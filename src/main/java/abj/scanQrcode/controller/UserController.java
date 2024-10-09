@@ -44,6 +44,7 @@ public class UserController {
     }
 
     @GetMapping("getAll")
+    @PreAuthorize("hasAnyAuthority('SUPER_ADMIN','ADMIN')")
     public ResponseEntity<DataDto<List<UserDto>>> getALL() {
         return ResponseEntity.ok(new DataDto<>(service.getAll()));
     }
