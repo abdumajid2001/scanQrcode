@@ -1,10 +1,12 @@
 package abj.scanQrcode.service.impl;
 
-import abj.scanQrcode.dto.auth.UserDto;
-import abj.scanQrcode.dto.auth.UserRegisterDto;
+import abj.scanQrcode.configuration.security.MyUserDetails;
+import abj.scanQrcode.dto.user.UserDto;
+import abj.scanQrcode.dto.user.UserRegisterDto;
 import abj.scanQrcode.entity.User;
 import abj.scanQrcode.exception.AlreadyException;
 import abj.scanQrcode.exception.NotFoundException;
+import abj.scanQrcode.projection.UserDtoProjection;
 import abj.scanQrcode.repository.UserRepository;
 import abj.scanQrcode.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -30,24 +32,47 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getByQrcode(String qrCodeText) {
-        return toDto(repository.findByQrCodeText(qrCodeText));
+        UserDtoProjection projection = repository
+                .findByQrCodeText(qrCodeText)
+                .orElseThrow(() -> new NotFoundException(qrCodeText + " not found"));
+
+        return toDto(projection);
     }
 
     @Override
     public UserDto getUser() {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        MyUserDetails user = (MyUserDetails) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+        UserDtoProjection projection = repository
+                .findUserById(user.getId())
+                .orElseThrow(() -> new NotFoundException(user.getId() + " not found"));
 
-        return toDto(user);
+        return toDto(projection);
     }
 
     @Override
     public Long register(UserRegisterDto dto) {
         if (repository.existsByUsername(dto.getUsername())) {
-            throw new AlreadyException(dto.getUsername() + "- username mavjud !!!");
+            throw new AlreadyException(dto.getUsername() + "- is already registered !!!");
         }
-        String qrText = UUID.randomUUID().toString().replace("-", "") + System.currentTimeMillis();
-        User user = new User(dto.getUsername(), encoder.encode(dto.getPassword()), dto.getRole(), dto.getFirstName(), dto.getLastName(), dto.getBirthDate(), dto.getRank(), qrText);
-
+        String qrCodeText = UUID.randomUUID().toString().replace("-", "") + System.currentTimeMillis();
+        User user = new User(
+                dto.getUsername(),
+                encoder.encode(dto.getPassword()),
+                dto.getFirstName(),
+                dto.getLastName(),
+                dto.getMiddleName(),
+                dto.getBirthDate(),
+                dto.getGender(),
+                dto.getPhoneNumber(),
+                dto.getAddress(),
+                dto.getPosition(),
+                dto.getRank(),
+                dto.getRole(),
+                qrCodeText
+        );
         User savedUser = repository.save(user);
 
         return savedUser.getId();
@@ -57,11 +82,7 @@ public class UserServiceImpl implements UserService {
     public List<UserDto> getAll() {
         return repository.findAllBy()
                 .parallelStream()
-                .map(user -> {
-                    UserDto dto = toDto(user);
-                    dto.setQrCodeText(user.getQrCodeText());
-                    return dto;
-                })
+                .map(this::toDto)
                 .toList();
     }
 
@@ -80,7 +101,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findById(Long id) {
-        return repository.findByIdAndDeletedFalse(id)
+        return repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("User not found"));
     }
 
@@ -88,12 +109,28 @@ public class UserServiceImpl implements UserService {
         return repository.save(user);
     }
 
-    public UserDto toDto(User user) {
-        String baseUrl = this.baseUrl + "/file/download/";
-        String fileUrl = Objects.nonNull(user.getFile()) ? baseUrl + "file/" + user.getFile().getId() : "";
-        String pictureUrl = Objects.nonNull(user.getPicture()) ? baseUrl + "picture/" + user.getPicture().getId() : "";
+    public UserDto toDto(UserDtoProjection projection) {
+        String fileDownloadUrl = baseUrl + "/file/download/";
+        String fileUrl = Objects.nonNull(projection.getFileId()) ? fileDownloadUrl + "file/" + projection.getFileId() : "";
+        String pictureUrl = Objects.nonNull(projection.getPictureId()) ? fileDownloadUrl + "picture/" + projection.getPictureId() : "";
 
-        return new UserDto(user.getId(), user.getUsername(), user.getRole(), user.getFirstName(), user.getLastName(), user.getBirthDate().toString(), user.getRank(), fileUrl, pictureUrl);
+        return new UserDto(
+                projection.getId(),
+                projection.getUsername(),
+                projection.getFirstname(),
+                projection.getLastname(),
+                projection.getMiddleName(),
+                projection.getBirthdate(),
+                projection.getGender(),
+                projection.getPhoneNumber(),
+                projection.getAddress(),
+                projection.getPosition(),
+                projection.getRank(),
+                projection.getRole(),
+                projection.getQrCodeText(),
+                fileUrl,
+                pictureUrl
+        );
     }
 
 }

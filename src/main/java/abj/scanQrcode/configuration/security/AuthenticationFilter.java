@@ -4,7 +4,6 @@ import abj.scanQrcode.dto.auth.AuthenticationRequest;
 import abj.scanQrcode.dto.auth.AuthenticationResponse;
 import abj.scanQrcode.dto.responce.AppErrorDto;
 import abj.scanQrcode.dto.responce.DataDto;
-import abj.scanQrcode.entity.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
@@ -58,11 +57,11 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException {
-        User user = (User) authResult.getPrincipal();
+        MyUserDetails user = (MyUserDetails) authResult.getPrincipal();
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
-        tokenService.revokeAllUserTokens(user);
-        tokenService.saveUserToken(user, jwtToken);
+        tokenService.revokeAllUserTokens(user.getId());
+        tokenService.saveUserToken(user.getId(), jwtToken);
 
         AuthenticationResponse authenticationResponse = AuthenticationResponse
                 .builder()

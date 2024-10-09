@@ -1,7 +1,8 @@
 package abj.scanQrcode;
 
-import abj.scanQrcode.dto.auth.AuthenticationRequest;
-import abj.scanQrcode.dto.auth.UserRegisterDto;
+import abj.scanQrcode.dto.user.UserRegisterDto;
+import abj.scanQrcode.enums.Gender;
+import abj.scanQrcode.enums.Position;
 import abj.scanQrcode.enums.Rank;
 import abj.scanQrcode.enums.UserRole;
 import abj.scanQrcode.service.UserService;
@@ -20,8 +21,22 @@ public class ScanQrcodeApplication {
     }
 
 //    @Bean
-//    public CommandLineRunner commandLineRunner(UserService service) {
-//        return (args -> service.register(new UserRegisterDto("username","123", UserRole.ADMIN,"Abdumajid","Abdullatipov", LocalDate.now(), Rank.POLKOVNIK)));
-//    }
+    public CommandLineRunner commandLineRunner(UserService service) {
+        return (args -> service.register(
+                new UserRegisterDto(
+                        "username",
+                        "123",
+                        "Abdumajid",
+                        "Abdullatipov",
+                        "Islomjon o'g'li",
+                        LocalDate.now(),
+                        Gender.ERKAK,
+                        "+998900032869",
+                        "Andijon viloyati",
+                        Position.DASTURCHI,
+                        Rank.POLKOVNIK,
+                        UserRole.ADMIN
+                )));
+    }
 
 }

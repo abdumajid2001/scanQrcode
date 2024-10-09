@@ -1,7 +1,7 @@
 package abj.scanQrcode.controller;
 
-import abj.scanQrcode.dto.auth.UserRegisterDto;
-import abj.scanQrcode.dto.auth.UserDto;
+import abj.scanQrcode.dto.user.UserRegisterDto;
+import abj.scanQrcode.dto.user.UserDto;
 import abj.scanQrcode.dto.responce.DataDto;
 import abj.scanQrcode.service.UserService;
 import jakarta.validation.Valid;
@@ -19,6 +19,12 @@ import java.util.List;
 public class UserController {
 
     private final UserService service;
+
+    @GetMapping("getByQrCodeText")
+    @PreAuthorize("hasAnyAuthority('SUPER_ADMIN','ADMIN','USER')")
+    public ResponseEntity<DataDto<UserDto>> getByQrCodeText(@RequestParam String qrCodeText) {
+        return ResponseEntity.ok(new DataDto<>(service.getByQrcode(qrCodeText)));
+    }
 
     @GetMapping("get")
     public ResponseEntity<DataDto<UserDto>> getUser() {
@@ -38,21 +44,14 @@ public class UserController {
     }
 
     @GetMapping("getAll")
-    @PreAuthorize("hasAnyAuthority('SUPER_ADMIN','ADMIN','USER')")
     public ResponseEntity<DataDto<List<UserDto>>> getALL() {
         return ResponseEntity.ok(new DataDto<>(service.getAll()));
     }
 
-//    @DeleteMapping("delete/{id}")
-//    @PreAuthorize("hasAnyAuthority('SUPER_ADMIN','ADMIN','USER')")
-//    public void delete(@PathVariable("id") Long id) {
-//        service.delete(id);
-//    }
-
-    @GetMapping("getByQrCodeText/{qrCodeText}")
+    @DeleteMapping("delete/{id}")
     @PreAuthorize("hasAnyAuthority('SUPER_ADMIN','ADMIN','USER')")
-    public ResponseEntity<DataDto<UserDto>> getByQrCodeText(@PathVariable("qrCodeText") String qrCodeText) {
-        return ResponseEntity.ok(new DataDto<>(service.getByQrcode(qrCodeText)));
+    public void delete(@PathVariable("id") Long id) {
+        service.delete(id);
     }
 
 }

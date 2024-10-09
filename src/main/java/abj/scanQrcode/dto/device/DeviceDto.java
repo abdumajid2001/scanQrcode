@@ -1,4 +1,4 @@
-package abj.scanQrcode.dto;
+package abj.scanQrcode.dto.device;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,7 +1,7 @@
 package abj.scanQrcode.service;
 
-import abj.scanQrcode.dto.auth.UserRegisterDto;
-import abj.scanQrcode.dto.auth.UserDto;
+import abj.scanQrcode.dto.user.UserRegisterDto;
+import abj.scanQrcode.dto.user.UserDto;
 import abj.scanQrcode.entity.User;
 
 import java.util.List;

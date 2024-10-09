@@ -2,7 +2,7 @@ spring:
   application:
     name: scanQrcode
   profiles:
-    active: dev
+    active: prod
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/scan_qr_code

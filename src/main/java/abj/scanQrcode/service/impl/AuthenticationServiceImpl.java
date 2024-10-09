@@ -1,13 +1,12 @@
 package abj.scanQrcode.service.impl;
 
 import abj.scanQrcode.configuration.security.JwtService;
+import abj.scanQrcode.configuration.security.MyUserDetails;
 import abj.scanQrcode.configuration.security.TokenService;
 import abj.scanQrcode.dto.auth.AuthenticationRequest;
 import abj.scanQrcode.dto.auth.AuthenticationResponse;
 import abj.scanQrcode.dto.responce.AppErrorDto;
 import abj.scanQrcode.dto.responce.DataDto;
-import abj.scanQrcode.entity.User;
-import abj.scanQrcode.repository.UserRepository;
 import abj.scanQrcode.service.AuthenticationService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,10 +34,10 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
 
-    private final UserRepository repository;
     private final JwtService jwtService;
     private final ObjectMapper mapper;
     private final TokenService tokenService;
+    private final UserDetailsServiceImpl userDetailsService;
 
     @Value("${baseUrl}")
     private String baseUrl;
@@ -54,11 +53,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         final String username = jwtService.extractUsername(refreshToken);
 
         if (Objects.nonNull(username)) {
-            User user = repository.findByUsername(username).orElseThrow();
+            MyUserDetails user = userDetailsService.loadUserByUsername(username);
+
             if (jwtService.isTokenValid(refreshToken, user)) {
                 String accessToken = jwtService.generateToken(user);
-                tokenService.revokeAllUserTokens(user);
-                tokenService.saveUserToken(user, accessToken);
+                tokenService.revokeAllUserTokens(user.getId());
+                tokenService.saveUserToken(user.getId(), accessToken);
                 AuthenticationResponse authenticationResponse = AuthenticationResponse
                         .builder()
                         .accessToken(accessToken)
