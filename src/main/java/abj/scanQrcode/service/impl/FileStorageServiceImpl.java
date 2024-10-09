@@ -54,7 +54,7 @@ public class FileStorageServiceImpl implements FileStorageService {
                 .orElseThrow(() -> new NotFoundException("File not found"));
     }
 
-    void deleteFile(FileStorage file) {
+    public void deleteFile(FileStorage file) {
         file.setDeleted(true);
         repository.save(file);
 

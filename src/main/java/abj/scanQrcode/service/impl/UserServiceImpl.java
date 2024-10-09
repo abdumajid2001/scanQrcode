@@ -8,9 +8,12 @@ import abj.scanQrcode.exception.AlreadyException;
 import abj.scanQrcode.exception.NotFoundException;
 import abj.scanQrcode.projection.UserDtoProjection;
 import abj.scanQrcode.repository.UserRepository;
+import abj.scanQrcode.service.FileStorageService;
 import abj.scanQrcode.service.UserService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,7 +24,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
+@Transactional
 public class UserServiceImpl implements UserService {
 
     @Value("${baseUrl}")
@@ -29,6 +32,13 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository repository;
     private final PasswordEncoder encoder;
+    private final FileStorageService fileStorageService;
+
+    public UserServiceImpl(UserRepository repository, PasswordEncoder encoder, @Lazy FileStorageService fileStorageService) {
+        this.repository = repository;
+        this.encoder = encoder;
+        this.fileStorageService = fileStorageService;
+    }
 
     @Override
     public UserDto getByQrcode(String qrCodeText) {
@@ -92,6 +102,9 @@ public class UserServiceImpl implements UserService {
 
         if (userOptional.isPresent()) {
             User user = userOptional.get();
+
+            fileStorageService.deleteFile(user.getFile());
+            fileStorageService.deleteFile(user.getPicture());
 
             user.setUsername(user.getUsername() + UUID.randomUUID());
             user.setDeleted(true);

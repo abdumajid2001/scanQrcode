@@ -35,7 +35,7 @@ public class UserController {
     }
 
     @PostMapping("register")
-    @PreAuthorize("hasAnyAuthority('SUPER_ADMIN','ADMIN','USER')")
+    @PreAuthorize("hasAnyAuthority('SUPER_ADMIN','ADMIN')")
     public ResponseEntity<DataDto<Long>> register(@Valid @RequestBody UserRegisterDto registerDto) {
         return new ResponseEntity<>(
                 new DataDto<>(service.register(registerDto)),
@@ -49,7 +49,7 @@ public class UserController {
     }
 
     @DeleteMapping("delete/{id}")
-    @PreAuthorize("hasAnyAuthority('SUPER_ADMIN','ADMIN','USER')")
+    @PreAuthorize("hasAnyAuthority('SUPER_ADMIN','ADMIN')")
     public void delete(@PathVariable("id") Long id) {
         service.delete(id);
     }
