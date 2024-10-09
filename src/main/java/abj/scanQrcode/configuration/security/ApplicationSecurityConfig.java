@@ -44,7 +44,7 @@ public class ApplicationSecurityConfig {
     private final TokenService tokenService;
     private AuthenticationManager authenticationManager;
 
-    public static final String[] WHITE_LIST = {"/auth/**","/file/download/picture/**", "/v3/api-docs/**", "/swagger-ui/**"};
+    public static final String[] WHITE_LIST = {"/auth/**", "/file/download/**", "/v3/api-docs/**", "/swagger-ui/**"};
 
     @Bean
     public UserDetailsService userDetailsService() {

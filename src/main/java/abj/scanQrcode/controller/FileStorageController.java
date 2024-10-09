@@ -21,9 +21,10 @@ public class FileStorageController {
     private final FileStorageService service;
 
     @PostMapping(value = "upload/{userId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<DataDto<String>> upload(@PathVariable Long userId,
-                                                  @RequestParam("file") MultipartFile file,
-                                                  @RequestParam("picture") MultipartFile picture
+    public ResponseEntity<DataDto<String>> upload(
+            @PathVariable Long userId,
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("picture") MultipartFile picture
     ) {
         service.upload(userId, file, picture);
         return ResponseEntity.ok(new DataDto<>("File uploaded successfully: "));

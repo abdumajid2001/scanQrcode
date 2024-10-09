@@ -15,5 +15,5 @@ public interface DeviceRepository extends JpaRepository<Device, Long> {
     @Query("select new abj.scanQrcode.dto.device.DeviceDto(t.id,t.deviceModel,t.deviceSystem , t.macAddress , t.serialNumber)  from Device t inner join User u on t.user = u where u.id = :userId and t.deleted = false ")
     List<DeviceDto> getDeviceByUserId(Long userId);
 
-    List<Device> findByUserAndDeletedFalse(User user);
+    List<Device> findByUser(User user);
 }

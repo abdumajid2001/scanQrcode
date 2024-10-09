@@ -47,7 +47,7 @@ public class DeviceServerImpl implements DeviceService {
 
     @Override
     public void deleteByUserId(Long userId) {
-        List<Device> delete = deviceRepository.findByUserAndDeletedFalse(userService.findById(userId));
+        List<Device> delete = deviceRepository.findByUser(userService.findById(userId));
 
         for (Device device : delete) {
             if (!device.isDeleted()) {

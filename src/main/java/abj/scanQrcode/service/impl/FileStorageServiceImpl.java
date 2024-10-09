@@ -109,8 +109,7 @@ public class FileStorageServiceImpl implements FileStorageService {
     public FileStorageDto download(Long id) {
         FileStorage file = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("File not found"));
-
-        String headerValue = "attachment; filename=\"" + file.getOriginalName() + "\"";
+        String headerValue = "inline; filename=\"" + file.getOriginalName() + "\"";
         Resource resource = loadAsResource(file.getGeneratedName());
 
         return new FileStorageDto(file.getType(), resource, headerValue);

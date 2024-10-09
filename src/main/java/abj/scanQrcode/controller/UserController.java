@@ -20,9 +20,9 @@ public class UserController {
 
     private final UserService service;
 
-    @GetMapping("getByQrCodeText/{qrCodeText}")
+    @GetMapping("getByQrCodeText")
     @PreAuthorize("hasAnyAuthority('SUPER_ADMIN','ADMIN','USER')")
-    public ResponseEntity<DataDto<UserDto>> getByQrCodeText(@PathVariable("qrCodeText") String qrCodeText) {
+    public ResponseEntity<DataDto<UserDto>> getByQrCodeText(@RequestParam String qrCodeText) {
         return ResponseEntity.ok(new DataDto<>(service.getByQrcode(qrCodeText)));
     }
 
@@ -48,10 +48,10 @@ public class UserController {
         return ResponseEntity.ok(new DataDto<>(service.getAll()));
     }
 
-//    @DeleteMapping("delete/{id}")
-//    @PreAuthorize("hasAnyAuthority('SUPER_ADMIN','ADMIN','USER')")
-//    public void delete(@PathVariable("id") Long id) {
-//        service.delete(id);
-//    }
+    @DeleteMapping("delete/{id}")
+    @PreAuthorize("hasAnyAuthority('SUPER_ADMIN','ADMIN','USER')")
+    public void delete(@PathVariable("id") Long id) {
+        service.delete(id);
+    }
 
 }

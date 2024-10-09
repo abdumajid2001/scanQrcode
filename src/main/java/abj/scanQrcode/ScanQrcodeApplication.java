@@ -21,22 +21,22 @@ public class ScanQrcodeApplication {
     }
 
 //    @Bean
-//    public CommandLineRunner commandLineRunner(UserService service) {
-//        return (args -> service.register(
-//                new UserRegisterDto(
-//                        "username",
-//                        "123",
-//                        "Abdumajid",
-//                        "Abdullatipov",
-//                        "Islomjon o'g'li",
-//                        LocalDate.now(),
-//                        Gender.ERKAK,
-//                        "+998900032869",
-//                        "Andijon viloyati",
-//                        Position.DASTURCHI,
-//                        Rank.POLKOVNIK,
-//                        UserRole.ADMIN
-//                )));
-//    }
+    public CommandLineRunner commandLineRunner(UserService service) {
+        return (args -> service.register(
+                new UserRegisterDto(
+                        "username",
+                        "123",
+                        "Abdumajid",
+                        "Abdullatipov",
+                        "Islomjon o'g'li",
+                        LocalDate.now(),
+                        Gender.ERKAK,
+                        "+998900032869",
+                        "Andijon viloyati",
+                        Position.DASTURCHI,
+                        Rank.POLKOVNIK,
+                        UserRole.ADMIN
+                )));
+    }
 
 }
