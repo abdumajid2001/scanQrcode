@@ -54,12 +54,14 @@ public class FileStorageServiceImpl implements FileStorageService {
                 .orElseThrow(() -> new NotFoundException("File not found"));
     }
 
-    void deleteFile(FileStorage file) {
+    public void deleteFile(FileStorage file) {
         file.setDeleted(true);
         repository.save(file);
 
         Path path = rootLocation.resolve(file.getGeneratedName());
-        path.toFile().delete();
+        if (path.toFile().delete()) {
+            System.out.println("delete file successfully at: " + path.toAbsolutePath());
+        }
     }
 
     public FileStorage uploadToMemory(MultipartFile file) {
