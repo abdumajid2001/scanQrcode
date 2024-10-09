@@ -11,7 +11,6 @@ import abj.scanQrcode.repository.UserRepository;
 import abj.scanQrcode.service.FileStorageService;
 import abj.scanQrcode.service.UserService;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.context.SecurityContextHolder;
