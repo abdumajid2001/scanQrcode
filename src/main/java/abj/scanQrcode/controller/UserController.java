@@ -1,14 +1,10 @@
 package abj.scanQrcode.controller;
 
-import abj.scanQrcode.dto.user.UserRegisterDto;
-import abj.scanQrcode.dto.user.UserDto;
 import abj.scanQrcode.dto.responce.DataDto;
+import abj.scanQrcode.dto.user.UserDto;
+import abj.scanQrcode.dto.user.UserRegisterDto;
 import abj.scanQrcode.service.UserService;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,13 +27,6 @@ public class UserController {
 
     private final UserService service;
 
-    @Operation(summary = "Get a user by QR code text",
-            description = "Retrieves a user based on the provided QR code text. " +
-                    "Roles required: USER, ADMIN, SUPER_ADMIN.",
-            security = {@SecurityRequirement(name = "bearerAuth")})
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successful retrieval of user data")
-    })
     @GetMapping("getByQrCodeText")
     @PreAuthorize("hasAnyAuthority('SUPER_ADMIN','ADMIN','USER')")
     public ResponseEntity<DataDto<UserDto>> getByQrCodeText(
@@ -46,12 +35,6 @@ public class UserController {
         return ResponseEntity.ok(new DataDto<>(service.getByQrcode(qrCodeText)));
     }
 
-    @Operation(summary = "Get the current user",
-            description = "Retrieves information about the currently authenticated user.",
-            security = {@SecurityRequirement(name = "bearerAuth")})
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successful retrieval of current user data")
-    })
     @GetMapping("get")
     public ResponseEntity<DataDto<UserDto>> getUser() {
         return new ResponseEntity<>(
@@ -60,13 +43,6 @@ public class UserController {
         );
     }
 
-    @Operation(summary = "Register a new user",
-            description = "Registers a new user in the system with the provided details. " +
-                    "Roles required: ADMIN, SUPER_ADMIN.",
-            security = {@SecurityRequirement(name = "bearerAuth")})
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successful registration with user ID")
-    })
     @PostMapping("register")
     @PreAuthorize("hasAnyAuthority('SUPER_ADMIN','ADMIN')")
     public ResponseEntity<DataDto<Long>> register(
@@ -77,26 +53,12 @@ public class UserController {
         );
     }
 
-    @Operation(summary = "Get all users",
-            description = "Retrieves a list of all registered users. " +
-                    "Roles required: ADMIN, SUPER_ADMIN.",
-            security = {@SecurityRequirement(name = "bearerAuth")})
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successful retrieval of all users")
-    })
     @GetMapping("getAll")
     @PreAuthorize("hasAnyAuthority('SUPER_ADMIN','ADMIN')")
     public ResponseEntity<DataDto<List<UserDto>>> getALL() {
         return ResponseEntity.ok(new DataDto<>(service.getAll()));
     }
 
-    @Operation(summary = "Delete a user by ID",
-            description = "Deletes the user identified by the provided ID. " +
-                    "Roles required: ADMIN, SUPER_ADMIN.",
-            security = {@SecurityRequirement(name = "bearerAuth")})
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "No content, successful deletion")
-    })
     @DeleteMapping("delete/{id}")
     @PreAuthorize("hasAnyAuthority('SUPER_ADMIN','ADMIN')")
     public void delete(

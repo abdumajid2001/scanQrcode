@@ -2,12 +2,12 @@ spring:
   application:
     name: scanQrcode
   profiles:
-    active: prod
+    active: dev
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/scan_qr_code
     username: postgres
-    password: 123
+    password: 12345
   jpa:
     show-sql: true
     properties:

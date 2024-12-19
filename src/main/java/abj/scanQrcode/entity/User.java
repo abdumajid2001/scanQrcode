@@ -10,8 +10,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.SQLRestriction;
+import org.hibernate.envers.Audited;
 
 import java.time.LocalDate;
+
+import static org.hibernate.envers.RelationTargetAuditMode.NOT_AUDITED;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,6 +27,7 @@ import java.time.LocalDate;
         }
 )
 @SQLRestriction("is_deleted = false")
+@Audited
 public class User extends Auditable {
 
     @Column(unique = true)
@@ -59,10 +63,12 @@ public class User extends Auditable {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "file_id")
+    @Audited(targetAuditMode = NOT_AUDITED)
     private FileStorage file;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "picture_id")
+    @Audited(targetAuditMode = NOT_AUDITED)
     private FileStorage picture;
 
     public User(String username,

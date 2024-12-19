@@ -1,4 +1,4 @@
-package abj.scanQrcode.configuration;
+package abj.scanQrcode.configuration.audit;
 
 import abj.scanQrcode.configuration.security.MyUserDetails;
 import org.springframework.context.annotation.Bean;

@@ -72,6 +72,7 @@ public class ApplicationSecurityConfig {
                 "http://192.168.30.30:8080",
                 "http://192.168.30.18:8080",
                 "https://new-python-generally.ngrok-free.app",
+                "localhost:8080",
                 "**"
         ));
         corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));

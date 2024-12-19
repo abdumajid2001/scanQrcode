@@ -20,18 +20,18 @@ public class ScanQrcodeApplication {
         SpringApplication.run(ScanQrcodeApplication.class, args);
     }
 
-//    @Bean
+    //    @Bean
     public CommandLineRunner commandLineRunner(UserService service) {
         return (args -> service.register(
                 new UserRegisterDto(
-                        "username",
-                        "123",
-                        "Abdumajid",
-                        "Abdullatipov",
+                        "username3",
+                        "1231",
+                        "Abdumajid1",
+                        "Abdullatipov1",
                         "Islomjon o'g'li",
                         LocalDate.now(),
                         Gender.ERKAK,
-                        "+998900032869",
+                        "+9989300328698",
                         "Andijon viloyati",
                         Position.DASTURCHI,
                         Rank.POLKOVNIK,
